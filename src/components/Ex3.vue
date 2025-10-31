@@ -1,60 +1,62 @@
 <script setup>
-import BlogPost from './subcomponents/BlogPost2.vue'
-import axios from 'axios'
+    import blogPost from './subcomponents/BlogPost2.vue'
+	import axios from 'axios'
 </script>
 
 <script>
-export default {
-  data() {
-    return {
-      posts: []
-    }
-  },
-  computed: {
-    baseUrl() {
-      if (window.location.hostname === 'localhost')
-        return 'http://localhost:3000'
-      else {
-        const codespace_host = window.location.hostname.replace('5173', '3000')
-        return `https://${codespace_host}`
-      }
-    }
-  },
-  created() {
-    axios.get(`${this.baseUrl}/posts`)
-      .then(response => {
-        this.posts = response.data
-        console.log(response.data)
-      })
-      .catch(error => {
-        this.posts = [{ entry: 'There was an error: ' + error.message }]
-      })
-  },
-  methods: {
-    deletePost(id) {
-      axios.get(`${this.baseUrl}/deletePost`, {
-        params: { id: id }
-      }).then(response => {
-        console.log(response.data.message)
-        this.posts = this.posts.filter(post => post.id !== id)
-      }).catch(error => {
-        console.log(error)
-      })
-    }
-  }
-}
+    export default {
+        data() {
+            return {
+                posts: [] 
+            }  
+        },
+        computed: {
+            baseUrl() {
+                if (window.location.hostname == 'localhost')
+                    return 'http://localhost:3000'
+                else {
+                    const codespace_host = window.location.hostname.replace('5173', '3000')
+                    return `https://${codespace_host}`;
+                }
+            }
+        },
+        created() { 
+            axios.get(`${this.baseUrl}/posts`)
+            .then(response => {
+                this.posts = response.data
+                console.log(response.data)
+            })
+            .catch(error => {
+                this.posts = [{ entry: 'There was an error: ' + error.message }]
+            })
+        },
+        methods: {
+            deletePost(id) {
+                axios.get(`${this.baseUrl}/deletePost`,{
+                    params: {
+                        id: id
+                    }}).then(response => {
+                        console.log(response.data.message)
+                        this.posts = this.posts.filter(post => post.id !== id)
+                    }).catch(error => {
+                        console.log(error)
+                    })
+                }
+            }
+        
+        }
+    
 </script>
 
 <template>
-  <BlogPost
-    v-for="post in posts"
-    :key="post.id"
-    :subject="post.subject"
-    :entry="post.entry"
-    :mood="post.mood"
-  >
-    <template #delete>
-      <button class="btn btn-danger" @click="deletePost(post.id)">Delete</button>
-    </template>
-  </BlogPost>
+    <blog-post 
+        v-for="post in posts" 
+        :subject="post.subject" 
+        :entry="post.entry" 
+        :mood="post.mood" 
+        :key="post.id">
+        <template v-slot:delete>
+            <button class="btn btn-primary" @click="deletePost(post.id)">Delete</button>
+        </template>
+    </blog-post>
 </template>

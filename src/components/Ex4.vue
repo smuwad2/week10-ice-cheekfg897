@@ -41,7 +41,7 @@ import TaskTracker from './subcomponents/TaskTracker.vue';
     <hr>
 
     <!-- TODO: Modify following code -->
-    <task-tracker v-for="task,idx in this.taskList" :task= task :idx= idx>
+    <task-tracker v-for="task,idx in this.taskList" :task= task :idx= idx @removeTask="removeTask(idx)">
 
     </task-tracker>
 
